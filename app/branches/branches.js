@@ -56,6 +56,7 @@ angular.module('ra_im').directive('branchesView', function(){
 			        		'city':d['#loc+city'],
 			        		'country':d['#country+name'],
 			        		'branchtype':d['#loc+branch+type'],
+			        		'branchname':d['#loc+branch+name'],
 			        		'address':d['#loc+address+branch'],
 			        		'telephone':d['#org+telephone'],
 			        		'countrycode':d['#country+code']

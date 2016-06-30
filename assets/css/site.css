@@ -195,3 +195,20 @@ li {
  #countrymap {
     height:540px;
 }
+
+.leaflet-popup {
+    min-width: 250px;
+}
+
+.popup h2 {
+    font-size: .9em;
+    margin-top: 10px;
+    margin-bottom: -4px;
+    color: #B71C1C;
+}
+
+.popup p {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-size: .9em;
+}
