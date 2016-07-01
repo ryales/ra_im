@@ -78,12 +78,17 @@ angular.module('ra_im').directive('countryView', function(){
 			});
 		});
 
+		// Building the branches map layer
 		this.createBranchLayer = function(data){
 
+			// Construct the markers array
 			var markers = [];
 
+			// Cycle through the data and do various things with it depending on criteria
 		    data.forEach(function(d){
+		    	// Check lat/long and only grab the data rows with valid coordinates
 		    	if(!isNaN(d['#geo+lat']) && d['#geo+lat']!='' && !isNaN(d['#geo+lon']) && d['#geo+lon']!=''){
+		    		// Style the NS headquarters
 		    		if(d['#loc+branch+code+type'] == '1'){
 		    			radius = 6;
 		    			opacity = 0.8;
@@ -92,6 +97,7 @@ angular.module('ra_im').directive('countryView', function(){
 		    			opacity = 0.6;
 		    		}
 
+		    		// Set the base style for each data feature
 			        var marker = L.circleMarker([d['#geo+lat'], d['#geo+lon']],{
 			            radius: radius,
 			            fillColor: "#B71C1C",
@@ -101,10 +107,13 @@ angular.module('ra_im').directive('countryView', function(){
 			            fillOpacity: opacity,
 			        });
 
-			        var popup = '<p>Location: '+d['#loc+city']+'</p>'+
-			        		'<p>Branch type: '+d['#loc+branch+type']+'</p>'+
-			        		'<p>Address: '+d['#loc+address+branch']+'</p>'+
-			        		'<p>Telephone: '+d['#org+telephone']+'</p>';
+			        // Define the popup on click for each feature
+			        var popup = '<div class="popup">'+
+			        		'<p>Location: <span style="float:right">'+d['#loc+city']+'</span><br/>'+
+			        		'Branch type: <span style="float:right">'+d['#loc+branch+type']+'</span></p>'+
+			        		'<h2><b>CONTACT INFORMATION</b></h2>'+
+			        		'<p>Address: <span style="float:right">'+d['#loc+address+branch']+'</span><br/>'+
+			        		'Telephone: <span style="float:right">'+d['#org+telephone']+'</span></p></div>';
 
 			       	marker.bindPopup(popup);
 
@@ -113,26 +122,29 @@ angular.module('ra_im').directive('countryView', function(){
 
 		    });
 
+		    // Add the data features to the map
 		    this.branchesOverlay = new L.featureGroup(markers).addTo(this.map);
 
+		    // Fit the bounds of the map view to the NS branch data
 		    this.map.fitBounds(this.branchesOverlay.getBounds());
 		}
 
+		// Function for initializing the NS centered basemap
 		this.init = function(){
-
-			var osm = new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+			// Set basemap tile layer
+			var basemap = new L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+    			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
 			});
-
+			// Center the map and load the basemap tile layer
 			this.map = L.map('countrymap',{
 				center: [0,0],
 		        zoom: 1,
-		        layers: [osm]
+		        layers: [basemap]
 			});
 
 		};
 
+		// Calls the initialize function based off the NS selected
 		this.init()
 
 	}]);
-
