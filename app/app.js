@@ -1,6 +1,8 @@
 (function(){
+	// Define the angular module
 	var app = angular.module('ra_im',[]);
 
+	// Define the angular controller
 	app.controller('pageController',['$scope',function($scope){
 		var parent = this;
 		this.view='global';

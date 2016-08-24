@@ -1,10 +1,12 @@
+// Angular directive for branches portion of site
+
 angular.module('ra_im').directive('branchesView', function(){
 		return {
 			restrict:'E',
 			templateUrl: 'app/branches/branches.html',
 		};
-	})
-	.controller('branchesController',['$http','$q','$scope','$rootScope','branchesService',function($http,$q,$scope,$rootScope,branchesService){
+})
+.controller('branchesController',['$http','$q','$scope','$rootScope','branchesService',function($http,$q,$scope,$rootScope,branchesService){
 
 		var self = this;
 
@@ -24,32 +26,39 @@ angular.module('ra_im').directive('branchesView', function(){
 					self.createBranchesMap(results[0]);
 					$rootScope.$broadcast('endloading');
 				}
-			});		
+			});
 		});
-  
+
+		// Create branches map using branches data source
 		this.createBranchesMap = function(data){
 
+			// Create global array for markers representing individual branch locations
 			var markers = [];
 
-		    data.forEach(function(d){
-		    	if(!isNaN(d['#geo+lat']) && d['#geo+lat']!='' && !isNaN(d['#geo+lon']) && d['#geo+lon']!=''){
-		    		if(d['#loc+branch+code+type'] == '1'){
-		    			radius = 4;
-		    			opacity = 0.8;
-		    		} else {
-		    			radius = 2
-		    			opacity = 0.5;
-		    		}
+			// For each record with lat/lon in the data source
+		  data.forEach(function(d){
+				  // Create a circle marker dependent on branch category
+		      if(!isNaN(d['#geo+lat']) && d['#geo+lat']!='' && !isNaN(d['#geo+lon']) && d['#geo+lon']!=''){
+		    	    if(d['#loc+branch+code+type'] == '1'){
+		    				radius = 4;
+		    				opacity = 0.8;
+		    			} else {
+		    				radius = 2
+		    				opacity = 0.5;
+		    			}
 
-			        var marker = L.circleMarker([d['#geo+lat'], d['#geo+lon']],{
-			            radius: radius,
-			            fillColor: "#B71C1C",
-			            color: "#B71C1C",
-			            weight:0,
-			            opacity: opacity,
-			            fillOpacity: opacity,
-			        });
+							// Define default marker properties
+							var marker = L.circleMarker([d['#geo+lat'], d['#geo+lon']],{
+			    				radius: radius,
+			    				fillColor: "#B71C1C",
+									color: "#B71C1C",
+			    				weight:0,
+			    				opacity: opacity,
+			    				fillOpacity: opacity,
+							});
 
+							// Define action on click
+							// Pull data from data source as defined below
 			        marker.on('click',function(){
 			        	self.branchData = {
 			        		'ns':d['#org'],
@@ -65,11 +74,12 @@ angular.module('ra_im').directive('branchesView', function(){
 			        	$scope.$digest();
 			        });
 
+							// Push marker properties and bound data to marker array
 			        markers.push(marker);
 			    }
-
 		    });
 
+				// Add markers to the map
 		    $scope.$parent.branchesOverlay = new L.featureGroup(markers).addTo($scope.map);
 		}
 

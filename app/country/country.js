@@ -28,18 +28,18 @@ angular.module('ra_im').directive('countryView', function(){
 		this.inform.rank = '';
 		this.inform.coping = '';
 		this.inform.hazard = '';
-		this.inform.vulnerability = ''; 
+		this.inform.vulnerability = '';
 
 		$scope.$on('loadCountry', function(event, args) {
 			self.ISO3 = $scope.inFocusCountry;
-		
+
 			this.countryPromise = countryService.getCountryData(self.ISO3);
 			this.NSPromise = countryService.getNSData(self.ISO3);
 			this.branchPromise = countryService.getBranchData(self.ISO3);
 			this.appealsPromise = countryService.getAppealsData(self.ISO3);
 			this.informPromise = countryService.getInformData(self.ISO3);
-			
-			$q.all([this.countryPromise,this.NSPromise,this.branchPromise,this.appealsPromise,this.informPromise]).then(function(results){				
+
+			$q.all([this.countryPromise,this.NSPromise,this.branchPromise,this.appealsPromise,this.informPromise]).then(function(results){
 				if(results[0].length>0){
 					self.countryName = results[0][0]['#country+name'];
 					self.incomeGroup = results[0][0]['#indicator+income'];
@@ -62,7 +62,7 @@ angular.module('ra_im').directive('countryView', function(){
 					self.inform.coping = results[4][0]['#indicator+coping'];
 					self.inform.hazard = results[4][0]['#indicator+hazard'];
 					self.inform.vulnerability = results[4][0]['#indicator+vulnerability'];
-				} 
+				}
 				if(results[2].length>0){
 					self.createBranchLayer(results[2]);
 				}
@@ -109,14 +109,16 @@ angular.module('ra_im').directive('countryView', function(){
 
 			        // Define the popup on click for each feature
 			        var popup = '<div class="popup">'+
+									'<h2><b>'+d['#loc+branch+name']+'</b></h2>'+
 			        		'<p>Location: <span style="float:right">'+d['#loc+city']+'</span><br/>'+
 			        		'Branch type: <span style="float:right">'+d['#loc+branch+type']+'</span></p>'+
 			        		'<h2><b>CONTACT INFORMATION</b></h2>'+
 			        		'<p>Address: <span style="float:right">'+d['#loc+address+branch']+'</span><br/>'+
 			        		'Telephone: <span style="float:right">'+d['#org+telephone']+'</span></p></div>';
 
+							// Bind data to the markers
 			       	marker.bindPopup(popup);
-
+							// Push markers data and properties to the markers array
 			        markers.push(marker);
 			    }
 
