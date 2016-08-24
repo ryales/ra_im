@@ -70,7 +70,7 @@
 	        });
 	    };
 	   	var getBranchData = function(iso3) {
-			countryUrl = 'https://proxy.hxlstandard.org/data.json?filter01=cut&select-query02-01=country%2Bcode%3D'+iso3+'&strip-headers=on&url=https%3A//docs.google.com/spreadsheets/d/1UMiFwFMijHlsRP_OM5zKNl6FFH5BXQ91qzcD8YnU4Ao/pub%3Fgid%3D396841826%26single%3Dtrue%26output%3Dcsv&filter02=select&cut-include-tags01=country%2Cloc%2Bbranch%2Btype%2Cloc%2Bbranch%2Btype%2Bcode%2Corg-telephone-fax-email-website%2Cloc%2Bcity%2Cgeo%2Blat%2Cgeo%2Blon%2C%23loc%2Bbranch%2Baddress%2C%23org%2Btelephone';
+			countryUrl = 'https://proxy.hxlstandard.org/data.json?filter01=cut&select-query02-01=country%2Bcode%3D'+iso3+'&strip-headers=on&url=https%3A//docs.google.com/spreadsheets/d/1UMiFwFMijHlsRP_OM5zKNl6FFH5BXQ91qzcD8YnU4Ao/pub%3Fgid%3D396841826%26single%3Dtrue%26output%3Dcsv&filter02=select&cut-include-tags01=country%2Cloc%2Bbranch%2Btype%2Cloc%2Bbranch%2Bname%2Cloc%2Bbranch%2Btype%2Bcode%2Corg-telephone-fax-email-website%2Cloc%2Bcity%2Cgeo%2Blat%2Cgeo%2Blon%2C%23loc%2Bbranch%2Baddress%2C%23org%2Btelephone';
 	        return $http({method:"GET", url:countryUrl}).then(function(result){
 	            return hxlProxyToJSON(result.data);
 	        });
@@ -88,7 +88,7 @@
 	        });
 	    }
 	    return {getCountryData:getCountryData,getNSData:getNSData,getBranchData:getBranchData,getAppealsData:getAppealsData,getInformData:getInformData};
-	});		
+	});
 
 	app.factory('wwwService', function($http) {
 		var getData = function() {
@@ -118,11 +118,11 @@
 		  		num = num.substr(0,num.length - 1)+' bil';
 		  	}
 		} else {
-			var num = d3.format(".2n")(input);	
+			var num = d3.format(".2n")(input);
 		}
 	    return num;
 	  };
-	});	
+	});
 
 })();
 
@@ -137,7 +137,7 @@ function hxlProxyToJSON(input,headers){
                 var key = parts[0]
                 if(parts.length>1){
                     var atts = parts.splice(1,parts.length);
-                    atts.sort();                    
+                    atts.sort();
                     atts.forEach(function(att){
                         key +='+'+att
                     });
